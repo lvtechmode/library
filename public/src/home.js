@@ -15,29 +15,29 @@ function getBooksBorrowedCount(books) {
 //return an ordered list of most common genres
 function getMostCommonGenres(books) {
   let result = [];
-  books.forEach(b => {
-    if (result.findIndex(r => r.name === b.genre) >= 0){
-      result[result.findIndex(r => r.name === b.genre)].count += 1 
+  books.forEach(index => {
+    if (result.findIndex(book => book.name === index.genre) >= 0){
+      result[result.findIndex(book => book.name === index.genre)].count += 1 
     } else {
-      result.push({name: b.genre, count: 1})
+      result.push({name: index.genre, count: 1})
     }
   })
-  result.sort((a,b) => b.count - a.count)
+  result.sort((bookA,bookB) => bookB.count - bookA.count)
   return result.slice(0, 5);
   }//returns limited list to the top five
 
 
   //return an ordered list of most popular books
 function getMostPopularBooks(books) {
-  return books
-  .map(book => {
-    return {
-      name: book.title,
-      count: book.borrows.length
-    }
-  })
-  .sort((a,b) => b.count - a.count)
-  .slice(0, 5);
+    const result = books.reduce((acc, book) => {
+      let borrow = book.borrows;
+      let bookInfo = { name: book.title, count: borrow.length };
+      acc.push(bookInfo);
+      return acc;
+    }, []);
+    result.sort((bookA, bookB) => bookB.count - bookA.count);
+    result.splice(5);
+    return result;
 }//returns limited list to the top five
  
 
